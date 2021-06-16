@@ -1,5 +1,6 @@
 "use strict";
 // TODO: add alert
+alert("Welcome...");
 
 let ans = Math.trunc(Math.random() * 21);
 let count = 20;
