@@ -1,12 +1,28 @@
 "use strict";
-// TODO: add alert
-alert(
-  "Welcome...\n\nEnter a number into the provided field to check its the hidden number or not. \n\nToo High means you missed it by a little margin \nHigh Guess means you are close \nToo Low means you have a bad guess\n\nYou got 20 chances to guess the hidden number\n\n\nEnjoy!!"
-);
+
+document.querySelector(".help").addEventListener("click", function () {
+  document.querySelector(".modal").classList.remove("hidden");
+  document.querySelector(".overlay").style = "filter:blur(5px);";
+});
+document.querySelector(".close").addEventListener("click", function () {
+  document.querySelector(".modal").classList.add("hidden");
+  document.querySelector(".overlay").style = "filter:blur(0px);";
+});
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
+    document.querySelector(".modal").classList.add("hidden");
+    document.querySelector(".overlay").style = "filter:blur(0px);";
+  }
+});
+
 document.querySelector(".inputvalue").value = "";
 let ans = Math.trunc(Math.random() * 21);
+if (ans === 0) {
+  ans = Math.trunc(Math.random() * 21);
+}
 let count = 20;
-let highScore;
+let highScore = 0;
+
 function reset() {
   ans = Math.trunc(Math.random() * 21);
   document.querySelector("body").style.backgroundColor = "rgb(44, 44, 44)";
@@ -34,7 +50,14 @@ document.querySelector(".check").addEventListener("click", function () {
   } else if (num > 20) {
     document.querySelector(".status").textContent = "Hint: Its less than 20...";
   } else {
-    if (modulus(ans, num) <= 5 && modulus(ans, num) !== 0) {
+    if (Number(count) - 1 === 0) {
+      document.querySelector("body").style.backgroundColor = "red";
+      document.querySelector(".status").textContent = "You Lost...";
+      document.querySelector(".currentscore").textContent = "0";
+      document.querySelector(".check").disabled = true;
+      document.querySelector(".inputvalue").disabled = true;
+      highScore = 0;
+    } else if (modulus(ans, num) <= 5 && modulus(ans, num) !== 0) {
       document.querySelector(".status").textContent = "Too High...";
     } else if (modulus(ans, num) <= 7 && modulus(ans, num) !== 0) {
       document.querySelector(".status").textContent = "High Guess...";
@@ -43,9 +66,13 @@ document.querySelector(".check").addEventListener("click", function () {
       document.querySelector(".guessBlock p").textContent = ans;
       document.querySelector("body").style.backgroundColor = "rgb(0, 251, 0)";
       document.querySelector(".guessBlock").style.width = "100%";
-      document.querySelector(".highscore").textContent = count;
-      count++;
-      highScore = count - 1;
+      if (count > highScore) {
+        highScore = String(count);
+
+        count++;
+      }
+      document.querySelector(".highscore").textContent = highScore;
+      document.querySelector(".inputvalue").disabled = true;
     } else {
       document.querySelector(".status").textContent = "Too Low...";
     }
@@ -81,7 +108,6 @@ document.addEventListener("keydown", function (pressedKey) {
         document.querySelector(".currentscore").textContent = "0";
         document.querySelector(".check").disabled = true;
         document.querySelector(".inputvalue").disabled = true;
-        highScore = 0;
       } else if (modulus(ans, num) <= 5 && modulus(ans, num) !== 0) {
         document.querySelector(".status").textContent = "Too High...";
       } else if (modulus(ans, num) <= 7 && modulus(ans, num) !== 0) {
@@ -91,9 +117,12 @@ document.addEventListener("keydown", function (pressedKey) {
         document.querySelector(".guessBlock p").textContent = ans;
         document.querySelector("body").style.backgroundColor = "rgb(0, 251, 0)";
         document.querySelector(".guessBlock").style.width = "100%";
-        document.querySelector(".highscore").textContent = count;
-        count++;
-        highScore = count - 1;
+        if (count > highScore) {
+          highScore = String(count);
+
+          count++;
+        }
+        document.querySelector(".highscore").textContent = highScore;
         document.querySelector(".inputvalue").disabled = true;
       } else {
         document.querySelector(".status").textContent = "Too Low...";
